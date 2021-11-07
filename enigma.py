@@ -1,7 +1,7 @@
 # %%
 
-def rotate(string: str):
-    return string[1:] + string[0]
+def rotate(string: str, rotations=1):
+    return string[rotations:] + string[:rotations]
 
 
 # %%
@@ -33,25 +33,32 @@ def cypher_letter(letter: str, scramblers: list, reflector: str):
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-scrambler_output = "UWYGADFPVZBECKMTHXSLRINQOJ"
+scrambler_1 = "UWYGADFPVZBECKMTHXSLRINQOJ"
+
+scrambler_2 = "AJPCZWRLFBDKOTYUQGENHXMIVS"
+
+scrambler_3 = "TAGBPCSDQEUFVNZHYIXJWLRKOM"
 
 reflector = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
 
+for scrambler in [scrambler_1, scrambler_2, scrambler_3]:
+    assert(len(scrambler) == len(set(scrambler)))
 
 assert (cypher_letter(
-    "P", [(alphabet, scrambler_output)], reflector) == "G")
+    "P", [(alphabet, scrambler_1)], reflector) == "G")
 
 # %%
 
 
-def enigma(input_string: str, scrambler, reflector: str):
+def enigma(input_string: str, scramblers: list, reflector: str):
     cyphered_string = ""
     for letter in input_string:
         # girar scramblers
-        scrambler = (rotate(scrambler[0]), rotate(scrambler[1]))
+        # TODO: girar el resto de los scramblers para mensajes mayores a 26 letras
+        scramblers[0] = (rotate(scramblers[0][0]), rotate(scramblers[0][1]))
 
         # ciphramos letra
-        cyphered_letter = cypher_letter(letter, [scrambler], reflector)
+        cyphered_letter = cypher_letter(letter, scramblers, reflector)
 
         # agregar al resultado
         cyphered_string += cyphered_letter
@@ -60,10 +67,40 @@ def enigma(input_string: str, scrambler, reflector: str):
 
 # %%
 
+
 assert (enigma(
-    "Z", (alphabet, scrambler_output), reflector) == "U")
+    "Z", [(alphabet, scrambler_1)], reflector) == "U")
 
 # %%
 assert (enigma(
-    "ZYDNI", (alphabet, scrambler_output), reflector) == "ULTRA")
+    "ZYDNI", [(alphabet, scrambler_1)], reflector) == "ULTRA")
+# %%
+
+#PURPLE#
+enigma(
+    "QHSGUWIG", [(rotate(alphabet, 4), rotate(scrambler_1, 4))], reflector)
+# %%
+assert(
+    enigma(
+        "QHSGUWIG",
+        [
+            (rotate(alphabet, 4), rotate(scrambler_1, 4)),
+            (alphabet, alphabet),
+            (alphabet, alphabet)
+        ], reflector)
+    ==
+    "XVPURPLE"
+)
+
+# %%
+
+enigma("HUGRVFQRXU", [(alphabet, scrambler_2),
+                      (rotate(alphabet, 4), rotate(scrambler_1, 4)),
+                      (rotate(alphabet), rotate(scrambler_3))], reflector
+       )
+# %%
+rotate(alphabet)
+
+# %%
+
 # %%
