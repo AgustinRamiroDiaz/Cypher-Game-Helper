@@ -23,7 +23,7 @@ def cypher_letter(letter: str, scramblers: list, reflector: str):
     position = scramble(
         alphabet, reflector, position)
 
-    for scrambler_input, scrambler_output in scramblers:
+    for scrambler_input, scrambler_output in scramblers[::-1]:
         position = scramble(scrambler_output, scrambler_input, position)
 
     return alphabet[position]
@@ -104,3 +104,51 @@ rotate(alphabet)
 # %%
 
 # %%
+word = "GYHRVFLRXY"
+letter = ""
+
+for index, letter in enumerate(word):
+    index += 1
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    alphabet_2 = "BACDNFHGIJKQMEOPLRZTYVWXUS"
+    position = alphabet_2.index(letter)
+
+    position = scramble(rotate(alphabet, index), rotate(scrambler_2, index), position)
+    position = scramble(rotate(alphabet, 4 + index // 26), rotate(scrambler_1,  4 + index // 26), position)
+    position = scramble(rotate(alphabet), rotate(scrambler_3), position)
+
+    position = scramble(
+        alphabet, reflector, position)
+
+    position = scramble(rotate(scrambler_3), rotate(alphabet), position)
+    position = scramble(rotate(scrambler_1, 4), rotate(alphabet, 4), position)
+    position = scramble( rotate(scrambler_2, index), rotate(alphabet, index),position)
+
+
+    print(alphabet_2[position])
+# %%
+
+
+alphabet =    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+scrambler_2 = "AJPCZWRLFBDKOTYUQGENHXMIVS"
+scrambler_1 = "UWYGADFPVZBECKMTHXSLRINQOJ"
+scrambler_3 = "TAGBPCSDQEUFVNZHYIXJWLRKOM"
+reflector =   "YRUHQSLDPXNGOKMIEBFZCWVJAT"
+
+HUGRVFQRXU
+
+"H"
+
+"BACDNFHGIJKQMEOPLRZTYVWXUS"
+
+"BCDEFGHIJKLMNOPQRSTUVWXYZA"
+"JPCZWRLFBDKOTYUQGENHXMIVSA"
+
+"EFGHIJKLMNOPQRSTUVWXYZABCD"
+"ADFPVZBECKMTHXSLRINQOJUWYG"
+
+"BCDEFGHIJKLMNOPQRSTUVWXYZA"
+"AGBPCSDQEUFVNZHYIXJWLRKOMT"
+
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+"YRUHQSLDPXNGOKMIEBFZCWVJAT"
